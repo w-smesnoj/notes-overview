@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="remedy.css" />
+    <link rel="stylesheet" href="flavour.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/atom-one-dark.min.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
+    <script src="scripts/helpers.js"></script>
+    <script src="scripts/main.js"></script>
+    <title>Notes Overview</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="holder-modal">
+        <div id="modal">
+          <h5 class="title">What do you want to set as document</h5>
+          <textarea
+            type="text"
+            rows="1"
+            name="content"
+            onkeyup="textAreaAdjust(this)"
+            class="modalInput scroll-style"
+            onclick="this.focus(); textAreaAdjust(this)  "
+          ></textarea>
+          <div class="back">
+            <input
+              type="button"
+              class="cancel button secondary"
+              value="Cancel"
+            />
+            <input
+              type="button"
+              class="confirm button primary"
+              value="Confirm"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="edits">
+        <input
+          type="button"
+          class="button-row"
+          value="New Row"
+          id="contentNewRow"
+        />
+        <input
+          type="button"
+          class="button-row"
+          value="New Column"
+          id="contentNewCol"
+        />
+        <input
+          type="button"
+          class="button-row"
+          value="Set Cell Hover"
+          id="contentAddHov"
+        />
+        <input
+          type="button"
+          class="button-row"
+          value="Set Row Document"
+          id="contentSetDoc"
+        />
+        <input
+          type="button"
+          class="button-row"
+          value="Delete Row"
+          id="contentDeleteRow"
+        />
+        <input
+          type="button"
+          class="button-row"
+          value="Delete Column"
+          id="contentDeleteCol"
+        />
+        <input
+          type="button"
+          class="button-row"
+          value="Reset Table"
+          id="resetTable"
+        />
+      </div>
+
+      <div class="hold">
+        <div class="function">
+          <label for="contentInput">
+            <img src="images/formula-fx.svg" alt="Forumla FX" />
+          </label>
+          <textarea
+            type="text"
+            rows="1"
+            name="modalx"
+            onkeyup="textAreaAdjust(this)"
+            id="contentInput"
+            onclick="this.focus(); textAreaAdjust(this)  "
+            onblur="textAreaAdjustReset(this) "
+          ></textarea>
+        </div>
+      </div>
+      <table class="table scroll-style" id="table">
+        <thead class="table-head"></thead>
+        <tbody class="table-body b" id="table-body"></tbody>
+      </table>
+      <div class="doc scroll-style" id="doc"></div>
+    </div>
+    <div id="hoverHolder"></div>
+  </body>
+</html>
+
+<style>
+  /* Info */
+  #doc {
+    color: var(--text-normal);
+  }
+
+  hr {
+    border-top: 1px solid rgb(255 255 255 / 10%);
+  }
+  #doc {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: small;
+    line-height: 1.8;
+    font-weight: var(--font-weight);
+    font-size: 0.9rem;
+    grid-area: doc;
+    width: 380px;
+    padding: 1.25rem;
+    background-color: var(--main-darker);
+    font-size: 0.75rem;
+    overflow: scroll;
+  }
+  #doc pre {
+    line-height: 1.6;
+  }
+  /* .hljs-comment,
+  .hljs-quote {
+    color: hsl(244 4% 47% / 1);
+  } */
+  .hljs {
+    background: var(--main-dim);
+    padding: 1.55em 0.6rem !important;
+    font-family: Consolas;
+    /* font-family: 'Fira Mono'; */
+    font-size: 0.55rem;
+  }
+</style>
+
+<style>
+  /* colors */
+  :root {
+    --buton-normal: tranparent;
+    --buton-hover: #3a4556;
+    --buton-txt: hsl(217 0% 75% / 1);
+    --text-normal: hsl(0 0% 75% / 1);
+    --text-dim: #b0b7c3;
+    --accent: #819be5;
+    --function: var(--main-darker);
+    --main: #464a53;
+    --edits: var(--main);
+    --main-dim: #26282c;
+    --main-dark: var(--main-dim);
+    --main-dark2: var(--main-darker);
+    --main-darker: #36393f;
+    --main-dark-pitch: hsl(216 7% 8% / 1);
+    --scroll-normal: transparent;
+    --scroll-hover: var(--edits);
+    --font-weight: normal;
+    --letterspacing: 0rem;
+    --focus: hsl(222 8% 26% / 1);
+    /* --buton-normal: tranparent;
+    --buton-hover: #3a4556;
+    --buton-txt: hsl(217 0% 75% / 1);
+    --text-normal: hsl(0 0% 75% / 1);
+    --text-dim: #b0b7c3;
+    --accent: #81e5d9;
+    --function: hsl(0 0% 100% / 0.04);
+    --main: #323232;
+    --main-dim: #191919;
+    --main-dark: #191919;
+    --main-dark2: #323232;
+    --main-darker: hsl(0 0% 100% / 0.04);
+    --main-dark-pitch: hsl(0 0% 6% / 1);
+    --scroll-normal: #323232;
+    --scroll-hover: #5e5e61;
+    --font-weight: normal;
+    --letterspacing: 0rem; */
+  }
+
+  #table-body > tr > td:nth-child(1),
+  #table-body > tr:nth-child(1) {
+    background-color: var(--main-dark);
+    width: 45px;
+    min-width: 45px;
+    text-align: center;
+    color: hsl(216 0% 55% / 1);
+    font-size: 0.65rem !important;
+  }
+  #table-body > tr > td:nth-child(1) {
+    position: sticky;
+    left: -3px;
+  }
+  #table-body > tr:nth-child(1) > td {
+    padding: 0.2rem;
+    position: sticky;
+    background-color: var(--main-dim);
+    top: -3px;
+  }
+
+  #hoverHolder:empty {
+    display: none;
+  }
+
+  #hoverHolder pre {
+    line-height: 1.35;
+  }
+  #hoverHolder code {
+    padding: 0.2rem;
+  }
+  #hoverHolder {
+    font-size: 0.8rem;
+    border-radius: 0.2rem;
+    padding: 0rem 0.5rem;
+    background: var(--main-dim);
+    box-shadow: 0px 2px 13px 0px #191919, 0px 1px 3px 0px hsl(0 0% 5% / 1);
+    position: fixed;
+    z-index: 999;
+    color: hsl(200 5% 69% / 1);
+    pointer-events: none;
+  }
+  .hoverSelected {
+    box-shadow: 0 7px 11px 0px #1b1d2387, 0 2px 4px 0px #1c1f288f,
+      0 0px 1px 1px #1c1f28;
+  }
+  .hold {
+    grid-area: func;
+    padding: 10px;
+    background: var(--main-dark);
+  }
+  .function:focus-within {
+    border: 1px solid var(--accent);
+    background: var(--focus);
+  }
+  .function {
+    border: 1px solid transparent;
+    display: grid;
+    grid-template-columns: 33px 1fr;
+    text-align: center;
+    align-items: center;
+    padding: 6px;
+    border-radius: 5px;
+    background: var(--function);
+    color: hsl(218 51% 93% / 1);
+  }
+  .function label {
+    margin: 0;
+  }
+  .edits {
+    padding: 0.7rem;
+    background: var(--edits);
+    gap: 0.5rem;
+    display: flex;
+  }
+
+  .container {
+    background: var(--main-dim);
+    max-width: fit-content;
+    overflow: hidden;
+    border-radius: 0.4rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      'controls controls controls'
+      'func func doc'
+      'tabl tabl doc';
+  }
+  .edits {
+    grid-area: controls;
+  }
+  .function {
+    grid-area: func;
+  }
+  .table {
+    grid-area: tabl;
+  }
+  /* #doc:empty {
+  } */
+  #doc {
+    margin-top: 10px;
+    border-radius: 7px;
+  }
+</style>
+<style>
+  td p {
+    font-size: 0.8rem;
+  }
+  code {
+    font-size: 87% !important;
+    font-family: Consolas;
+  }
+  .table tr {
+    background: var(--main-darker);
+  }
+  .table thead th,
+  .table td,
+  .table th {
+    padding: 0.15rem 0.5rem;
+    border-bottom: 1px solid var(--main-dark);
+    cursor: default;
+    height: 31px;
+    width: 105px;
+  }
+  td {
+    cursor: pointer !important;
+  }
+  td:hover {
+    background-color: var(--main);
+  }
+
+  .A > tr:nth-child(1) > td:nth-child(1),
+  .B > tr:nth-child(1) > td:nth-child(2),
+  .C > tr:nth-child(1) > td:nth-child(3),
+  .D > tr:nth-child(1) > td:nth-child(4),
+  .E > tr:nth-child(1) > td:nth-child(5),
+  .F > tr:nth-child(1) > td:nth-child(6),
+  .G > tr:nth-child(1) > td:nth-child(7),
+  .H > tr:nth-child(1) > td:nth-child(8),
+  .I > tr:nth-child(1) > td:nth-child(9),
+  .J > tr:nth-child(1) > td:nth-child(10),
+  .K > tr:nth-child(1) > td:nth-child(11),
+  .L > tr:nth-child(1) > td:nth-child(12),
+  .M > tr:nth-child(1) > td:nth-child(13),
+  .N > tr:nth-child(1) > td:nth-child(14),
+  .O > tr:nth-child(1) > td:nth-child(15),
+  .P > tr:nth-child(1) > td:nth-child(16),
+  .Q > tr:nth-child(1) > td:nth-child(17),
+  .R > tr:nth-child(1) > td:nth-child(18),
+  .S > tr:nth-child(1) > td:nth-child(19),
+  .T > tr:nth-child(1) > td:nth-child(20),
+  .U > tr:nth-child(1) > td:nth-child(21),
+  .V > tr:nth-child(1) > td:nth-child(22),
+  .W > tr:nth-child(1) > td:nth-child(23),
+  .X > tr:nth-child(1) > td:nth-child(24),
+  .Y > tr:nth-child(1) > td:nth-child(25),
+  .Z > tr:nth-child(1) > td:nth-child(26) {
+    border-radius: 7px 7px 0px 0px;
+    background-color: var(--main-dark2) !important;
+    border: 1px solid transparent;
+  }
+
+  th:focus,
+  td:focus,
+  .selected {
+    outline: 1px solid var(--accent) !important;
+  }
+
+  .table {
+    margin: 0;
+    margin-left: 10px;
+    /* max-height: 500px; */
+  }
+  body {
+    background-color: #131416;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3Crect stroke='%23131416' stroke-width='0.83' width='1' height='1' id='s'/%3E%3Cpattern id='a' width='3' height='3' patternUnits='userSpaceOnUse' patternTransform='scale(10) translate(-900 -675)'%3E%3Cuse fill='%2318191b' href='%23s' y='2'/%3E%3Cuse fill='%2318191b' href='%23s' x='1' y='2'/%3E%3Cuse fill='%231c1d1f' href='%23s' x='2' y='2'/%3E%3Cuse fill='%231c1d1f' href='%23s'/%3E%3Cuse fill='%23212224' href='%23s' x='2'/%3E%3Cuse fill='%23212224' href='%23s' x='1' y='1'/%3E%3C/pattern%3E%3Cpattern id='b' width='7' height='11' patternUnits='userSpaceOnUse' patternTransform='scale(10) translate(-900 -675)'%3E%3Cg fill='%23262729'%3E%3Cuse href='%23s'/%3E%3Cuse href='%23s' y='5' /%3E%3Cuse href='%23s' x='1' y='10'/%3E%3Cuse href='%23s' x='2' y='1'/%3E%3Cuse href='%23s' x='2' y='4'/%3E%3Cuse href='%23s' x='3' y='8'/%3E%3Cuse href='%23s' x='4' y='3'/%3E%3Cuse href='%23s' x='4' y='7'/%3E%3Cuse href='%23s' x='5' y='2'/%3E%3Cuse href='%23s' x='5' y='6'/%3E%3Cuse href='%23s' x='6' y='9'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='h' width='5' height='13' patternUnits='userSpaceOnUse' patternTransform='scale(10) translate(-900 -675)'%3E%3Cg fill='%23262729'%3E%3Cuse href='%23s' y='5'/%3E%3Cuse href='%23s' y='8'/%3E%3Cuse href='%23s' x='1' y='1'/%3E%3Cuse href='%23s' x='1' y='9'/%3E%3Cuse href='%23s' x='1' y='12'/%3E%3Cuse href='%23s' x='2'/%3E%3Cuse href='%23s' x='2' y='4'/%3E%3Cuse href='%23s' x='3' y='2'/%3E%3Cuse href='%23s' x='3' y='6'/%3E%3Cuse href='%23s' x='3' y='11'/%3E%3Cuse href='%23s' x='4' y='3'/%3E%3Cuse href='%23s' x='4' y='7'/%3E%3Cuse href='%23s' x='4' y='10'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='c' width='17' height='13' patternUnits='userSpaceOnUse' patternTransform='scale(10) translate(-900 -675)'%3E%3Cg fill='%232b2c2d'%3E%3Cuse href='%23s' y='11'/%3E%3Cuse href='%23s' x='2' y='9'/%3E%3Cuse href='%23s' x='5' y='12'/%3E%3Cuse href='%23s' x='9' y='4'/%3E%3Cuse href='%23s' x='12' y='1'/%3E%3Cuse href='%23s' x='16' y='6'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='d' width='19' height='17' patternUnits='userSpaceOnUse' patternTransform='scale(10) translate(-900 -675)'%3E%3Cg fill='%23131416'%3E%3Cuse href='%23s' y='9'/%3E%3Cuse href='%23s' x='16' y='5'/%3E%3Cuse href='%23s' x='14' y='2'/%3E%3Cuse href='%23s' x='11' y='11'/%3E%3Cuse href='%23s' x='6' y='14'/%3E%3C/g%3E%3Cg fill='%232f3032'%3E%3Cuse href='%23s' x='3' y='13'/%3E%3Cuse href='%23s' x='9' y='7'/%3E%3Cuse href='%23s' x='13' y='10'/%3E%3Cuse href='%23s' x='15' y='4'/%3E%3Cuse href='%23s' x='18' y='1'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='e' width='47' height='53' patternUnits='userSpaceOnUse' patternTransform='scale(10) translate(-900 -675)'%3E%3Cg fill='%23819be5'%3E%3Cuse href='%23s' x='2' y='5'/%3E%3Cuse href='%23s' x='16' y='38'/%3E%3Cuse href='%23s' x='46' y='42'/%3E%3Cuse href='%23s' x='29' y='20'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='f' width='59' height='71' patternUnits='userSpaceOnUse' patternTransform='scale(10) translate(-900 -675)'%3E%3Cg fill='%23819be5'%3E%3Cuse href='%23s' x='33' y='13'/%3E%3Cuse href='%23s' x='27' y='54'/%3E%3Cuse href='%23s' x='55' y='55'/%3E%3C/g%3E%3C/pattern%3E%3Cpattern id='g' width='139' height='97' patternUnits='userSpaceOnUse' patternTransform='scale(10) translate(-900 -675)'%3E%3Cg fill='%23819be5'%3E%3Cuse href='%23s' x='11' y='8'/%3E%3Cuse href='%23s' x='51' y='13'/%3E%3Cuse href='%23s' x='17' y='73'/%3E%3Cuse href='%23s' x='99' y='57'/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect fill='url(%23a)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23b)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23h)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23c)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23d)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23e)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23f)' width='100%25' height='100%25'/%3E%3Crect fill='url(%23g)' width='100%25' height='100%25'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+    background-size: cover;
+    letter-spacing: var(--letterspacing);
+    color: hsl(220 7% 73% / 1);
+    letter-spacing: 1.2;
+    display: grid;
+    height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  table {
+    color: var(--text-normal);
+    overflow: scroll;
+    font-weight: var(--font-weight);
+    display: block;
+    border-spacing: 0;
+    white-space: nowrap;
+    border-collapse: collapse;
+    background: var(--main-dark);
+  }
+  code {
+    color: hsl(0 0% 51% / 1);
+    word-break: break-word;
+    border-radius: 0.1rem;
+    padding: 0.14rem 0.4rem;
+    background: var(--main-dark);
+    margin: 0rem 0.05rem;
+  }
+  th {
+    background: hsl(220 13% 12% / 1);
+    position: sticky;
+    top: 0px;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+  }
+  th {
+    text-align: inherit;
+  }
+  textarea {
+    resize: auto;
+    background: transparent;
+    color: hsl(0 0% 60% / 1);
+    border: hsl(200 5% 69% / 1);
+    outline: transparent;
+    margin: 0px !important;
+    padding: 0.3rem;
+    min-height: 25px;
+    font-family: Consolas;
+  }
+  .function label img {
+    width: 39px;
+    /* filter: invert(1); */
+    opacity: 0.6;
+    height: 19px;
+  }
+  pre {
+    white-space: pre;
+  }
+  .rowfocus {
+    background: var(--focus) !important;
+  }
+  .rowfocus > td:nth-child(1) {
+    background: var(--focus) !important;
+    border-radius: 7px 0px 0px 7px;
+  }
+</style>
+
+<style>
+  /* SCROLL */
+  .scroll-style::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    background: var(--main-dim);
+  }
+  .scroll-style::-webkit-scrollbar-corner {
+    background: var(--main-dim);
+  }
+
+  .scroll-style::-webkit-scrollbar-track {
+    background: var(--main-dim);
+    border-radius: 10px;
+  }
+
+  .scroll-style::-webkit-scrollbar-thumb {
+    border-radius: 14px;
+    background-color: var(--scroll-normal);
+    background-clip: content-box;
+  }
+
+  /* .scroll-style:hover.scroll-style::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  } */
+
+  /* .scroll-style:hover.scroll-style::-webkit-scrollbar-track {
+    background: #1b1d23;
+  } */
+
+  .scroll-style:hover.scroll-style::-webkit-scrollbar-thumb {
+    background: var(--scroll-hover);
+  }
+</style>
+
+<style>
+  /* Holder */
+
+  .holder-modal {
+    display: none;
+    background: #00000070;
+    z-index: 999;
+    grid-area: tabl;
+  }
+  .show {
+    display: grid;
+  }
+  #modal {
+    background: var(--main-dark);
+    display: grid;
+    max-width: 570px;
+    max-height: 500px;
+    height: 100%;
+    width: 100%;
+    grid-template-rows: auto 1fr auto;
+    margin: auto;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 5px 20px 0px #00000057, 0px 4px 7px 0px #00000078;
+  }
+  #modal textarea {
+    height: unset !important;
+    padding: 1rem;
+  }
+  #modal .back,
+  #modal .title {
+    padding: 1rem;
+    background: var(--main);
+  }
+  #modal h5 {
+    margin: 0;
+  }
+  .back {
+    text-align-last: right;
+  }
+</style>
