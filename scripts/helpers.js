@@ -647,7 +647,12 @@ let arrays = [
     cells: [
       { content: '2', node: {} },
       { content: 'add/remove', node: {} },
-      { content: '`push`', node: {} },
+      {
+        content: '`push`',
+        node: {},
+        hover:
+          '```js\nconst animals = [\'pigs\', \'goats\', \'sheep\'];\n\nconst count = animals.push(\'cows\');\nconsole.log(animals);\n// expected output: Array ["pigs", "goats", "sheep", "cows"]\n```',
+      },
       { content: '...items', node: {} },
       { content: 'adds `items` to end', node: {} },
       { content: 'new `length`', node: {} },
@@ -661,7 +666,12 @@ let arrays = [
     cells: [
       { content: '3', node: {} },
       { content: 'add/remove', node: {} },
-      { content: '`pop`', node: {} },
+      {
+        content: '`pop`',
+        node: {},
+        hover:
+          '```js\nconst plants = [\'broccoli\', \'cauliflower\', \'cabbage\', \'kale\', \'tomato\'];\n\nconsole.log(plants.pop());\n// expected output: "tomato"\n\nconsole.log(plants);\n// expected output: Array ["broccoli", "cauliflower", "cabbage", "kale"]\n```',
+      },
       { content: ' ', node: {} },
       { content: 'extracts an `item` from end', node: {} },
       { content: 'extracted `item` from _end_', node: {} },
@@ -670,13 +680,18 @@ let arrays = [
     ],
     node: {},
     doc:
-      '# push\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n',
+      '# pop\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n',
   },
   {
     cells: [
       { content: '4', node: {} },
       { content: 'add/remove', node: {} },
-      { content: '`shift`', node: {} },
+      {
+        content: '`shift`',
+        node: {},
+        hover:
+          '```js\nconst array1 = [1, 2, 3];\n\nconst firstElement = array1.shift();\n\nconsole.log(array1);\n// expected output: Array [2, 3]\n\nconsole.log(firstElement);\n// expected output: 1\n```',
+      },
       { content: ' ', node: {} },
       { content: 'extracts an `item` from beginning', node: {} },
       { content: 'extracted `item` from _start_', node: {} },
@@ -684,12 +699,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# shift',
   },
   {
     cells: [
       { content: '5', node: {} },
       { content: 'add/remove', node: {} },
-      { content: '`unshift`', node: {} },
+      {
+        content: '`unshift`',
+        node: {},
+        hover:
+          '```js\nconst array1 = [1, 2, 3];\n\nconsole.log(array1.unshift(4, 5));\n// expected output: 5\n\nconsole.log(array1);\n// expected output: Array [4, 5, 1, 2, 3]\n```',
+      },
       { content: '...items', node: {} },
       { content: 'adds `items` to beginning', node: {} },
       { content: '`new array` with _added_ items', node: {} },
@@ -697,12 +718,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# unshift',
   },
   {
     cells: [
       { content: '6', node: {} },
       { content: 'add/remove', node: {} },
-      { content: '`splice`', node: {} },
+      {
+        content: '`splice`',
+        node: {},
+        hover:
+          '```js\nconst months = [\'Jan\', \'March\', \'April\', \'June\'];\nmonths.splice(1, 0, \'Feb\');\n// inserts at index 1\nconsole.log(months);\n// expected output: Array ["Jan", "Feb", "March", "April", "June"]\n```',
+      },
       { content: 'pos, deleteCount, ...items', node: {} },
       {
         content:
@@ -714,12 +741,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# splice',
   },
   {
     cells: [
       { content: '7', node: {} },
       { content: 'add/remove', node: {} },
-      { content: '`slice`', node: {} },
+      {
+        content: '`slice`',
+        node: {},
+        hover:
+          "```js\nconst animals = ['ant', 'bison', 'camel', 'duck', 'elephant'];\n\nconsole.log(animals.slice(2, 4));\n// expected output: Array [\"camel\", \"duck\"]\n```",
+      },
       { content: 'start, end', node: {} },
       {
         content:
@@ -738,7 +771,12 @@ let arrays = [
     cells: [
       { content: '8', node: {} },
       { content: 'add/remove', node: {} },
-      { content: '`concat`', node: {} },
+      {
+        content: '`concat`',
+        node: {},
+        hover:
+          '```js\nconst array1 = [\'a\', \'b\', \'c\'];\nconst array2 = [\'d\', \'e\', \'f\'];\nconst array3 = array1.concat(array2);\n\nconsole.log(array3);\n// expected output: Array ["a", "b", "c", "d", "e", "f"]\n```',
+      },
       { content: '...items', node: {} },
       {
         content:
@@ -750,12 +788,18 @@ let arrays = [
       { content: 'yes', node: {} },
     ],
     node: {},
+    doc: '# concat',
   },
   {
     cells: [
       { content: '9', node: {} },
       { content: 'search', node: {} },
-      { content: '`indexOf`', node: {} },
+      {
+        content: '`indexOf`',
+        node: {},
+        hover:
+          "```js\nconst beasts = ['ant', 'bison', 'camel', 'duck', 'bison'];\n\nconsole.log(beasts.indexOf('bison'));\n// expected output: 1\n\n// start from index 2\nconsole.log(beasts.indexOf('bison', 2));\n// expected output: 4\n```",
+      },
       { content: 'item, pos', node: {} },
       { content: 'look for `item` starting from `pos`', node: {} },
       { content: '`index`', node: {} },
@@ -763,12 +807,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# indexOf',
   },
   {
     cells: [
       { content: '10', node: {} },
       { content: 'search', node: {} },
-      { content: '`includes`', node: {} },
+      {
+        content: '`includes`',
+        node: {},
+        hover:
+          "```js\nconst array1 = [1, 2, 3];\n\nconsole.log(array1.includes(2));\n// expected output: true\n\nconst pets = ['cat', 'dog', 'bat'];\n\nconsole.log(pets.includes('cat'));\n// expected output: true\n```",
+      },
       { content: 'value, pos to begin search', node: {} },
       { content: 'boolean result if `value` in array', node: {} },
       { content: '`true` (===)', node: {} },
@@ -776,12 +826,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# includes',
   },
   {
     cells: [
       { content: '11', node: {} },
       { content: 'search', node: {} },
-      { content: '`find`', node: {} },
+      {
+        content: '`find`',
+        node: {},
+        hover:
+          '```js\nconst array1 = [5, 12, 8, 130, 44];\n\nconst found = array1.find(element => element > 10);\n\nconsole.log(found);\n// expected output: 12\n```',
+      },
       { content: 'func(item, index, array), thisArg', node: {} },
       {
         content:
@@ -793,12 +849,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# find',
   },
   {
     cells: [
       { content: '12', node: {} },
       { content: 'search', node: {} },
-      { content: '`filter`', node: {} },
+      {
+        content: '`filter`',
+        node: {},
+        hover:
+          "```js\nconst words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];\n\nconst result = words.filter(word => word.length > 6);\n\nconsole.log(result);\n// expected output: Array [\"exuberant\", \"destruction\", \"present\"]\n```",
+      },
       { content: 'func(item, index, array), thisArg', node: {} },
       {
         content:
@@ -810,6 +872,7 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# filter',
   },
   {
     cells: [
@@ -831,6 +894,7 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# findIndex',
   },
   {
     cells: [
@@ -849,12 +913,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# forEach',
   },
   {
     cells: [
       { content: '15', node: {} },
       { content: 'transform', node: {} },
-      { content: '`map`', node: {} },
+      {
+        content: '`map`',
+        node: {},
+        hover:
+          '```js\nconst array1 = [1, 4, 9, 16];\n\n// pass a function to map\nconst map1 = array1.map(x => x * 2);\n\nconsole.log(map1);\n// expected output: Array [2, 8, 18, 32]\n```',
+      },
       { content: 'func(item, index, array), thisArg', node: {} },
       {
         content:
@@ -866,12 +936,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# map',
   },
   {
     cells: [
       { content: '16', node: {} },
       { content: 'transform', node: {} },
-      { content: '`sort`', node: {} },
+      {
+        content: '`sort`',
+        node: {},
+        hover:
+          '```js\nconst months = [\'March\', \'Jan\', \'Feb\', \'Dec\'];\nmonths.sort();\nconsole.log(months);\n// expected output: Array ["Dec", "Feb", "Jan", "March"]\n\nconst array1 = [1, 30, 4, 21, 100000];\narray1.sort();\nconsole.log(array1);\n// expected output: Array [1, 100000, 21, 30, 4]\n```',
+      },
       { content: 'func(a, b)', node: {} },
       { content: 'sorts the array in-place', node: {} },
       { content: '`array` reference, _sorted_', node: {} },
@@ -879,12 +955,18 @@ let arrays = [
       { content: 'yes', node: {} },
     ],
     node: {},
+    doc: '# sort',
   },
   {
     cells: [
       { content: '17', node: {} },
       { content: 'transform', node: {} },
-      { content: '`reverse`', node: {} },
+      {
+        content: '`reverse`',
+        node: {},
+        hover:
+          '```js\nconst array1 = [\'one\', \'two\', \'three\'];\nconsole.log(\'array1:\', array1);\n// expected output: "array1:" Array ["one", "two", "three"]\n\nconst reversed = array1.reverse();\nconsole.log(\'reversed:\', reversed);\n// expected output: "reversed:" Array ["three", "two", "one"]\n```',
+      },
       { content: ' ', node: {} },
       { content: 'reverses the array in-place', node: {} },
       { content: '`array` reference, _reversed_', node: {} },
@@ -892,12 +974,18 @@ let arrays = [
       { content: 'yes', node: {} },
     ],
     node: {},
+    doc: '# reverse',
   },
   {
     cells: [
       { content: '18', node: {} },
       { content: 'transform', node: {} },
-      { content: '`split`', node: {} },
+      {
+        content: '`split`',
+        node: {},
+        hover:
+          "```js\nconst str = 'The quick brown fox jumps over the lazy dog.';\n\nconst words = str.split(' ');\nconsole.log(words[3]);\n// expected output: \"fox\"\n\nconst chars = str.split('');\nconsole.log(chars[8]);\n// expected output: \"k\"\n```",
+      },
       { content: 'delimiter, limit on arr length', node: {} },
       { content: 'converts a string to array', node: {} },
       { content: '`new array` of _split_ strings ', node: {} },
@@ -905,12 +993,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# split',
   },
   {
     cells: [
       { content: '19', node: {} },
       { content: 'transform', node: {} },
-      { content: '`join`', node: {} },
+      {
+        content: '`join`',
+        node: {},
+        hover:
+          "```js\nconst elements = ['Fire', 'Air', 'Water'];\n\nconsole.log(elements.join());\n// expected output: \"Fire,Air,Water\"\n\nconsole.log(elements.join(''));\n// expected output: \"FireAirWater\"\n\nconsole.log(elements.join('-'));\n// expected output: \"Fire-Air-Water\"\n```",
+      },
       { content: 'delimiter, limit on arr length', node: {} },
       { content: 'converts an array to string', node: {} },
       { content: '`string` of _joined_ arrays', node: {} },
@@ -918,12 +1012,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# join',
   },
   {
     cells: [
       { content: '20', node: {} },
       { content: 'transform', node: {} },
-      { content: '`reduce`', node: {} },
+      {
+        content: '`reduce`',
+        node: {},
+        hover:
+          '```js\nconst array1 = [1, 2, 3, 4];\nconst reducer = (accumulator, currentValue) => accumulator + currentValue;\n\n// 1 + 2 + 3 + 4\nconsole.log(array1.reduce(reducer));\n// expected output: 10\n\n// 5 + 1 + 2 + 3 + 4\nconsole.log(array1.reduce(reducer, 5));\n// expected output: 15\n```',
+      },
       { content: 'func(accumulator, item, index, array), initial', node: {} },
       {
         content:
@@ -935,6 +1035,7 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# reduce',
   },
   {
     cells: [
@@ -953,12 +1054,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# Array.isArray',
   },
   {
     cells: [
       { content: '22', node: {} },
       { content: 'check', node: {} },
-      { content: '`some`', node: {} },
+      {
+        content: '`some`',
+        node: {},
+        hover:
+          '```js\nconst array = [1, 2, 3, 4, 5];\n\n// checks whether an element is even\nconst even = (element) => element % 2 === 0;\n\nconsole.log(array.some(even));\n// expected output: true\n```',
+      },
       { content: 'func(item, index, array), thisArg', node: {} },
       {
         content:
@@ -970,12 +1077,18 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# some',
   },
   {
     cells: [
       { content: '23', node: {} },
       { content: 'check', node: {} },
-      { content: '`every`', node: {} },
+      {
+        content: '`every`',
+        node: {},
+        hover:
+          '```js\nconst isBelowThreshold = (currentValue) => currentValue < 40;\n\nconst array1 = [1, 30, 39, 29, 10, 13];\n\nconsole.log(array1.every(isBelowThreshold));\n// expected output: true\n```',
+      },
       { content: 'func(item, index, array), thisArg', node: {} },
       {
         content:
@@ -987,6 +1100,7 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
+    doc: '# every',
   },
   {
     cells: [
