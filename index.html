@@ -14,13 +14,28 @@
       rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/atom-one-dark.min.css"
     />
+    <script src="https://cdn.rawgit.com/yahoo/xss-filters/master/dist/xss-filters.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js"></script>
     <script src="scripts/helpers.js"></script>
     <script src="scripts/main.js"></script>
     <title>Notes Overview</title>
   </head>
-  <body>
+  <body class="scroll-style">
+    <div id="mobileNav">
+      <button class="button square">
+        <div class="icon"><img src="images/icons/menu.svg" /></div>
+      </button>
+      <button class="button square" onclick="toggleEdits()">
+        <div class="icon"><img src="images/icons/edit.svg" /></div>
+      </button>
+      <button class="button square" onclick="toggleFunctionInput()">
+        <div class="icon"><img src="images/icons/markdown.svg" /></div>
+      </button>
+      <button class="button square" onclick="toggleDoc()">
+        <div class="icon"><img src="images/icons/notes.svg" /></div>
+      </button>
+    </div>
     <div class="container">
       <div class="holder-modal">
         <div id="modal">
@@ -47,7 +62,7 @@
           </div>
         </div>
       </div>
-      <div class="edits">
+      <div class="edits" id="edits">
         <input
           type="button"
           class="button-row"
@@ -92,10 +107,10 @@
         />
       </div>
 
-      <div class="hold">
+      <div class="hold" id="input-function">
         <div class="function">
           <label for="contentInput">
-            <img src="images/formula-fx.svg" alt="Forumla FX" />
+            <img src="images/icons/markdown.svg" alt="Markdown" />
           </label>
           <textarea
             type="text"
@@ -114,11 +129,81 @@
       </table>
       <div class="doc scroll-style" id="doc"></div>
     </div>
-    <div id="hoverHolder"></div>
+    <div id="hoverHolder" class="js"></div>
   </body>
 </html>
 
 <style>
+  pre code.hljs {
+    display: block;
+  }
+
+  code.hljs {
+    display: inline;
+  }
+
+  body {
+    grid-auto-rows: 1fr auto auto;
+  }
+
+  #table-body > tr > td:nth-child(1) {
+    position: initial !important;
+  }
+  #table-body > tr:nth-child(1) > td {
+    text-align: left;
+    padding: 0.2rem 0.5rem;
+  }
+  .icon > img {
+    transform: scale(0.8);
+  }
+  .icon {
+    width: 40px;
+    height: 40px;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.3rem 0 0 0.3rem;
+    transition: height 0.1s ease-in-out;
+  }
+  .square {
+    padding: 0rem;
+    background-color: transparent;
+    height: fit-content;
+  }
+
+  .visually-hidden {
+    display: none !important;
+  }
+
+  .container {
+    margin-top: 0 !important;
+  }
+  .table {
+    margin-left: 0 !important;
+  }
+
+  html,
+  body {
+    height: 100% !important;
+  }
+</style>
+
+<style>
+  div#doc {
+    width: auto;
+    /* margin-left: 12px; */
+    margin: 0;
+    border-radius: 0;
+    /* padding: 0.75rem; */
+    z-index: 9999;
+    width: 380px;
+  }
+
+  #mobileNav {
+    display: none;
+  }
+
   /* Info */
   #doc {
     color: var(--text-normal);
@@ -151,7 +236,7 @@
   } */
   .hljs {
     background: var(--main-dim);
-    padding: 1.55em 0.6rem !important;
+    /* padding: 0.5em 0.6rem !important; */
     font-family: Consolas;
     /* font-family: 'Fira Mono'; */
     font-size: 0.55rem;
@@ -160,6 +245,28 @@
 
 <style>
   /* colors */
+  /* :root {
+    --buton-normal: tranparent;
+    --buton-hover: #3a4556;
+    --buton-txt: hsl(217 0% 75% / 1);
+    --text-normal: hsl(0 0% 75% / 1);
+    --text-dim: #b0b7c3;
+    --accent: #819be5;
+    --function: var(--main-darker);
+
+    --main: #292930;
+    --edits: var(--main);
+    --main-dim: hsl(240deg 8% 13%);
+    --main-dark: var(--main-dim);
+    --main-dark2: var(--main-darker);
+    --main-darker: #292930;
+    --main-dark-pitch: hsl(216 7% 8% / 1);
+    --scroll-normal: transparent;
+    --scroll-hover: var(--edits);
+    --font-weight: normal;
+    --letterspacing: 0rem;
+    --focus: hsl(222 8% 26% / 1);
+  } */
   :root {
     --buton-normal: tranparent;
     --buton-hover: #3a4556;
@@ -180,23 +287,6 @@
     --font-weight: normal;
     --letterspacing: 0rem;
     --focus: hsl(222 8% 26% / 1);
-    /* --buton-normal: tranparent;
-    --buton-hover: #3a4556;
-    --buton-txt: hsl(217 0% 75% / 1);
-    --text-normal: hsl(0 0% 75% / 1);
-    --text-dim: #b0b7c3;
-    --accent: #81e5d9;
-    --function: hsl(0 0% 100% / 0.04);
-    --main: #323232;
-    --main-dim: #191919;
-    --main-dark: #191919;
-    --main-dark2: #323232;
-    --main-darker: hsl(0 0% 100% / 0.04);
-    --main-dark-pitch: hsl(0 0% 6% / 1);
-    --scroll-normal: #323232;
-    --scroll-hover: #5e5e61;
-    --font-weight: normal;
-    --letterspacing: 0rem; */
   }
 
   #table-body > tr > td:nth-child(1),
@@ -224,21 +314,24 @@
   }
 
   #hoverHolder pre {
-    line-height: 1.35;
+    line-height: 1.25;
   }
   #hoverHolder code {
-    padding: 0.2rem;
+    padding: 0.1rem;
   }
   #hoverHolder {
     font-size: 0.8rem;
     border-radius: 0.2rem;
-    padding: 0rem 0.5rem;
+    padding: 0.9rem 0.9rem;
     background: var(--main-dim);
     box-shadow: 0px 2px 13px 0px #191919, 0px 1px 3px 0px hsl(0 0% 5% / 1);
     position: fixed;
     z-index: 999;
-    color: hsl(200 5% 69% / 1);
+
     pointer-events: none;
+  }
+  #hoverHolder code {
+    color: unset;
   }
   .hoverSelected {
     box-shadow: 0 7px 11px 0px #1b1d2387, 0 2px 4px 0px #1c1f288f,
@@ -246,7 +339,7 @@
   }
   .hold {
     grid-area: func;
-    padding: 10px;
+    /* padding: 10px; */
     background: var(--main-dark);
   }
   .function:focus-within {
@@ -260,7 +353,7 @@
     text-align: center;
     align-items: center;
     padding: 6px;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     background: var(--function);
     color: hsl(218 51% 93% / 1);
   }
@@ -268,25 +361,25 @@
     margin: 0;
   }
   .edits {
-    padding: 0.7rem;
+    padding: 0.4rem;
     background: var(--edits);
-    gap: 0.5rem;
-    display: flex;
+    /* gap: 0.5rem; */
+    /* display: flex; */
   }
 
   .container {
     background: var(--main-dim);
     max-width: fit-content;
     overflow: hidden;
-    border-radius: 0.4rem;
-    margin-left: auto;
-    margin-right: auto;
+    /* border-radius: 0.4rem; */
+    /* margin-left: auto;
+    margin-right: auto; */
     margin-top: 30px;
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
+    grid-template-columns: auto 1fr;
     grid-template-rows: auto auto 1fr;
     grid-template-areas:
-      'controls controls controls'
+      'controls controls doc'
       'func func doc'
       'tabl tabl doc';
   }
@@ -316,18 +409,19 @@
   }
   .table tr {
     background: var(--main-darker);
+    box-shadow: inset 0px 1px 0px 0px hsl(220deg 8% 19%);
   }
   .table thead th,
   .table td,
   .table th {
     padding: 0.15rem 0.5rem;
-    border-bottom: 1px solid var(--main-dark);
-    cursor: default;
+    /* border-bottom: 1px solid var(--main-dark); */
+    /* cursor: default; */
     height: 31px;
     width: 105px;
   }
   td {
-    cursor: pointer !important;
+    /* cursor: pointer; */
   }
   td:hover {
     background-color: var(--main);
@@ -480,6 +574,23 @@
 </style>
 
 <style>
+  body {
+    grid-auto-flow: column;
+    grid-auto-columns: min-content 1fr;
+    justify-content: center;
+    max-width: 100%;
+  }
+  div#mobileNav {
+    display: grid;
+    grid-auto-rows: max-content;
+    /* place-content: space-between; */
+    background: var(--edits);
+    /* height: min-content; */
+    /* flex-flow: wrap; */
+    height: auto;
+    align-content: flex-start;
+  }
+
   /* Holder */
 
   .holder-modal {
@@ -518,5 +629,99 @@
   }
   .back {
     text-align-last: right;
+  }
+  /* .dragged > * {
+    opacity: 0;
+  } */
+
+  tr > .draggable {
+    /* background-color: hsl(222deg 8% 41%) !important; */
+    /* background-image: url(images/icons/drag.svg) !important; */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 21px;
+    cursor: grab;
+  }
+
+  .dragged {
+    pointer-events: none;
+    position: sticky;
+    box-shadow: 0px 0px 8px 0px #819be5, 0px 0px 0 2px #819be5 !important;
+    /* border: 1px solid; */
+    /* transform: translate(23px, 10px); */
+    /* cursor: grab; */
+  }
+  .dragged > td {
+    box-shadow: 0 0 0 transparent;
+  }
+  .dragging-within,
+  .dragging-within .draggable {
+    user-select: none;
+
+    cursor: grabbing;
+  }
+  .dropped {
+    /* outline: 1px solid red; */
+  }
+  /* .dragging-within .table-body > tr:hover > td { */
+  /* padding-bottom: 45px; */
+  /* box-shadow: inset 0 -40px 0 var(--main-dim);
+  } */
+  .dragging-within .table-body > tr:hover > td {
+    /* box-shadow: inset 0 -15px 10px -10px var(--main-dim); */
+    /* padding-bottom: 31px; */
+  }
+  .dragging-within .table-body > tr:hover + tr > td {
+    /* padding-top: 31px; */
+  }
+
+  @media screen and (max-width: 768px) {
+    body {
+      grid-auto-flow: row;
+      justify-content: center;
+      max-width: 100%;
+    }
+    div#hoverHolder {
+      transform: translateY(0) translateX(0) !important;
+      position: inherit;
+      pointer-events: all;
+      width: 100%;
+      overflow-x: scroll;
+      box-shadow: 0 0 0 black;
+    }
+
+    .full-doc {
+      grid-template-columns: 0fr 0fr 1fr !important;
+      /* grid-template-areas:
+      'doc doc doc'
+      'doc doc doc'
+      'doc doc doc' !important; */
+    }
+    div#doc {
+      width: auto;
+      margin-left: 12px;
+      border-radius: 0;
+      padding: 0.75rem;
+      z-index: 9999;
+      width: auto;
+    }
+    .edits {
+      position: absolute;
+      max-height: 40%;
+      flex-flow: column;
+      text-align-last: left;
+      overflow: auto;
+      bottom: 60px;
+      left: 10px;
+      border-radius: 0.2rem;
+      z-index: 5000;
+    }
+    div#mobileNav {
+      display: flex;
+      place-content: space-between;
+      background: var(--edits);
+      height: min-content;
+      flex-flow: wrap;
+    }
   }
 </style>

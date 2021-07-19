@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 function tableConstructor() {
+  let bodyElm = qs('body');
   let o = this;
   let docElm = qs('#doc');
   let contentSetDoc = qs('#contentSetDoc');
@@ -16,6 +17,7 @@ function tableConstructor() {
   let inputNewCol = qs('#contentNewCol');
   let hoverHolder = qs('#hoverHolder');
   let tableElm = qs('#table-body');
+  let tableTag = qs('#table');
 
   this.initial = function (rawTable) {
     this.parseTable(rawTable);
@@ -29,6 +31,17 @@ function tableConstructor() {
       },
       true
     );
+
+    $on(
+      document,
+      'mousemove',
+      function (ev) {
+        let eval = `translate(${ev.clientX + 15}px,${ev.clientY + 15}px)`;
+        hoverHolder.style.transform = eval;
+        // hoverHolder.style.transform += `translateX()`;
+      },
+      false
+    );
   };
 
   this.parseTable = function (rawTable) {
@@ -37,10 +50,14 @@ function tableConstructor() {
       row.node.addEventListener('focusin', (x) => {
         let content = row?.doc || '';
         docElm.innerHTML = converter.makeHtml(content);
-        updateHLJS();
+        docElm.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+
+        // updateHLJS();
       });
-      row.cells.map((x) => {
-        return new tableCell(x, i);
+      row.cells.map((x, j) => {
+        return new tableCell(x, i, j);
       });
       return row;
     });
@@ -49,15 +66,87 @@ function tableConstructor() {
 
   function tableRow(row) {
     row.node = qs('.table-body').insertRow(-1);
-    row.node.id = uuidv4();
+    let id = uuidv4();
+    row.node.id = id;
+    row.id = id;
     return row;
   }
 
-  function tableCell(cell, i) {
+  //
+  //
+  //
+  // DRAG FUNCTION
+  //
+  //
+  //
+  //
+  //
+  const mouseDownHandler = function (e, cell) {
+    // Attach the listeners to `document`
+    document.addEventListener('mousemove', mouseOverHandler);
+    document.addEventListener('mouseup', mouseUpHandler);
+  };
+
+  let isDraggingStarted = false;
+  let rowx;
+  let nxt;
+  const mouseOverHandler = function (e) {
+    // console.log(e);
+    let selRowNode = o.selected.node.parentNode;
+    let destRowNode = e.toElement.parentNode;
+    if (!isDraggingStarted) {
+      isDraggingStarted = true;
+      bodyElm.classList.add('dragging-within');
+      selRowNode.classList.add('dragged');
+    }
+    if (e.toElement.localName != 'td') return;
+    if (selRowNode.id == destRowNode.id) return;
+    let selIndex = o.table.findIndex((row) => row.id === selRowNode.id);
+    let destIndex = o.table.findIndex((row) => row.id === destRowNode.id);
+    // arraymove(o.table, selIndex, destIndex);
+
+    // swap(selRowNode, destRowNode);
+    // var b = o.table[selIndex];
+    // o.table[selIndex] = o.table[destIndex];
+    // o.table[destIndex] = b;
+
+    console.log(selIndex, destIndex);
+  };
+
+  const mouseUpHandler = function (e) {
+    // Remove the handlers of `mousemove` and `mouseup`
+    document.removeEventListener('mousemove', mouseOverHandler);
+    document.removeEventListener('mouseup', mouseUpHandler);
+    isDraggingStarted = false;
+
+    bodyElm.classList.remove('dragging-within');
+    o.selected.node.parentNode.classList.remove('dragged');
+  };
+
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+
+  function tableCell(cell, i, j) {
     cell.node = qs('.table-body').childNodes[i].insertCell(-1);
     cell.node.innerHTML = converter.makeHtml(cell.content);
     cell.node.tabIndex = 0;
-    cell.node.id = uuidv4();
+    if (j < 1) {
+      console.log(cell.node);
+
+      cell.node.classList.add('draggable');
+      // Attach event handler
+      cell.node.addEventListener('mousedown', mouseDownHandler);
+    }
+    let id = uuidv4();
+    cell.node.id = id;
+    cell.id = id;
     if (cell?.hover != undefined) {
       cell.node.addEventListener('mouseenter', showHover);
       cell.node.addEventListener('mouseleave', hideHover);
@@ -104,6 +193,7 @@ function tableConstructor() {
   showHover = function (e) {
     let rowInd = e.target.parentNode.rowIndex;
     let colInd = e.target.cellIndex;
+
     hoverHandler.hoverSelected = o.table[rowInd].cells[colInd];
   };
   hideHover = function () {
@@ -135,7 +225,8 @@ function tableConstructor() {
       row.cells[colIndex].node.remove();
       row.cells.splice(colIndex, 1);
     });
-    console.log(this.table);
+    console.log(o);
+    this.table.columns--;
     this.saveToLocal();
   };
 
@@ -189,9 +280,11 @@ function tableConstructor() {
       let x = value?.hover || '';
 
       hoverHolder.innerHTML = converter.makeHtml(x);
+      // hoverHolder.highlightBlock(block);
+      hljs.highlightBlock(hoverHolder);
       old?.classList.remove('hoverSelected');
       nrw?.classList.add('hoverSelected');
-      updateHLJS();
+      // updateHLJS();
       target[key] = value;
       return true;
     },
@@ -225,7 +318,13 @@ function tableConstructor() {
     }
   });
   $on(input, 'keydown', (e) => {
+    // This allows the focus to continue to the next element on Enter keypress.
+    // But it still allows Shift+Enter combination for multiline content.
+    if (e.key == 'Enter' && e.shiftKey) {
+      return;
+    }
     switch (e.key) {
+      case 'Enter':
       case 'Tab':
         e.preventDefault();
         this.updateCell(this?.selected, input.value);
@@ -261,6 +360,7 @@ function tableConstructor() {
         let nodeAbove =
           node.parentNode?.previousSibling?.childNodes[node.cellIndex] ?? node;
         nodeAbove.focus();
+        console.log(nodeAbove);
         break;
       case 'ArrowRight':
         let nodeToRight = node?.nextSibling ?? node;
@@ -290,12 +390,21 @@ function tableConstructor() {
     if (!cell) return;
     cell.content = value;
     cell.node.innerHTML = converter.makeHtml(value);
+    // hljs.highlightBlock(cell.node);
     this.saveToLocal();
-    updateHLJS();
+    // updateHLJS();
   };
 
+  this.getRowByCellNodeID = function (ID) {
+    // let row = ID.parentNode.rowIndex;
+
+    return this.table.find((row) => (row.node.id = ID));
+  };
   this.getRowByCellNode = function (ID) {
     let row = ID.parentNode.rowIndex;
+
+    // let fnd = this.table.find((row) => (row.node.id = ID));
+    // console.log(fnd);
     return this.table[row];
   };
   this.getCellByNode = function (ID) {
@@ -343,3 +452,28 @@ async function newModal(question, defaultx) {
     };
   });
 }
+
+// -----------
+
+function toggleEdits() {
+  var element = document.getElementById('edits');
+  element.classList.toggle('visually-hidden');
+}
+function toggleFunctionInput() {
+  var element = document.getElementById('input-function');
+  element.classList.toggle('visually-hidden');
+}
+function toggleDoc() {
+  var element = document.getElementById('doc');
+  element.classList.toggle('visually-hidden');
+
+  var element2 = document.getElementsByClassName('container')[0];
+  element2.classList.toggle('full-doc');
+}
+
+// document.addEventListener('DOMContentLoaded', (event) => {
+//   document.querySelectorAll('code').forEach((block) => {
+//     block.classList.add('js');
+//     hljs.highlightBlock(block);
+//   });
+// });

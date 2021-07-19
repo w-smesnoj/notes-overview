@@ -69,17 +69,6 @@ function rowIndexAsAlphabet(index) {
   return String.fromCharCode(index + 64 + 1);
 }
 
-document.addEventListener(
-  'mousemove',
-  function (ev) {
-    qs('#hoverHolder').style.transform =
-      'translateY(' + (ev.clientY + 15) + 'px)';
-    qs('#hoverHolder').style.transform +=
-      'translateX(' + (ev.clientX + 10) + 'px)';
-  },
-  false
-);
-
 async function GoogleAPIToRawTable(url) {
   let rawTable = [];
   await fetch(url)
@@ -111,7 +100,17 @@ async function GoogleAPIToRawTable(url) {
 
   return rawTable;
 }
-
+function arraymove(arr, fromIndex, toIndex) {
+  var element = arr[fromIndex];
+  arr.splice(fromIndex, 1);
+  arr.splice(toIndex, 0, element);
+}
+function swap(node1, node2) {
+  const afterNode2 = node2.nextElementSibling;
+  const parent = node2.parentNode;
+  node1.replaceWith(node2);
+  parent.insertBefore(node1, afterNode2);
+}
 // $on(
 //   qs('#table'),
 //   'mousedown',
@@ -619,20 +618,7 @@ let rawDataFromGoogle = [
 let arrays = [
   {
     cells: [
-      { content: ' ', node: {}, hover: 'dddddddddddddd' },
-      { content: 'A', node: {} },
-      { content: 'B', node: {} },
-      { content: 'C', node: {} },
-      { content: 'D', node: {} },
-      { content: 'E', node: {} },
-      { content: 'F', node: {} },
-      { content: 'G', node: {} },
-    ],
-    node: {},
-  },
-  {
-    cells: [
-      { content: '1', node: {} },
+      { content: '', node: {} },
       { content: '#####Category', node: {} },
       { content: '#####Function', node: {} },
       { content: '#####Arguments', node: {} },
@@ -645,7 +631,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '2', node: {} },
+      { content: '1', node: {} },
       { content: 'add/remove', node: {} },
       {
         content: '`push`',
@@ -664,7 +650,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '3', node: {} },
+      { content: '2', node: {} },
       { content: 'add/remove', node: {} },
       {
         content: '`pop`',
@@ -679,12 +665,11 @@ let arrays = [
       { content: ' ', node: {} },
     ],
     node: {},
-    doc:
-      '# pop\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n',
+    doc: '# pop\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n\nLorem, ipsum dolor sit amet consectetur adipisicing elit. Ab reiciendis deserunt magni. Dolore culpa vero sit dolores fugiat et aspernatur exercitationem expedita placeat voluptates ut, ea quidem ipsum facere doloremque itaque suscipit? Iusto, minima. Facere distinctio magni quibusdam itaque minima rerum vitae dignissimos error et quaerat? Asperiores laborum aspernatur debitis.\n\n- Sint dolorem aut.\n- Dicta consectetur iure.\n- Quia non ipsum hic voluptatibus exercitationem.\n',
   },
   {
     cells: [
-      { content: '4', node: {} },
+      { content: '3', node: {} },
       { content: 'add/remove', node: {} },
       {
         content: '`shift`',
@@ -703,7 +688,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '5', node: {} },
+      { content: '4', node: {} },
       { content: 'add/remove', node: {} },
       {
         content: '`unshift`',
@@ -722,7 +707,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '6', node: {} },
+      { content: '5', node: {} },
       { content: 'add/remove', node: {} },
       {
         content: '`splice`',
@@ -745,7 +730,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '7', node: {} },
+      { content: '6', node: {} },
       { content: 'add/remove', node: {} },
       {
         content: '`slice`',
@@ -764,12 +749,11 @@ let arrays = [
       { content: '  ', node: {} },
     ],
     node: {},
-    doc:
-      "# slice\n\n```js\narr.slice([start], [end]);\n```\n\nIt returns a new array copying to it all items from index `start` to `end` (not including `end`). Both `start` and `end` can be negative, in that case position from array end is assumed.\n\n```js\nlet arr = ['Alpha', 'Bravo', 'Charlie', 'Delta'];\n\nalert(arr.slice(1, 3));\n// Bravo,Charlie (copy from 1 to 3)\nalert(arr.slice(-2));\n// Charlie,Delta (copy from -2 till the end)\n```\n\nWe can also call it without arguments: `arr.slice()` creates a copy of `arr`. That’s often used to **obtain a copy** for further transformations that should _not affect_ the _original array_.\n",
+    doc: "# slice\n\n```js\narr.slice([start], [end]);\n```\n\nIt returns a new array copying to it all items from index `start` to `end` (not including `end`). Both `start` and `end` can be negative, in that case position from array end is assumed.\n\n```js\nlet arr = ['Alpha', 'Bravo', 'Charlie', 'Delta'];\n\nalert(arr.slice(1, 3));\n// Bravo,Charlie (copy from 1 to 3)\nalert(arr.slice(-2));\n// Charlie,Delta (copy from -2 till the end)\n```\n\nWe can also call it without arguments: `arr.slice()` creates a copy of `arr`. That’s often used to **obtain a copy** for further transformations that should _not affect_ the _original array_.\n",
   },
   {
     cells: [
-      { content: '8', node: {} },
+      { content: '7', node: {} },
       { content: 'add/remove', node: {} },
       {
         content: '`concat`',
@@ -792,7 +776,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '9', node: {} },
+      { content: '8', node: {} },
       { content: 'search', node: {} },
       {
         content: '`indexOf`',
@@ -811,7 +795,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '10', node: {} },
+      { content: '9', node: {} },
       { content: 'search', node: {} },
       {
         content: '`includes`',
@@ -830,7 +814,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '11', node: {} },
+      { content: '10', node: {} },
       { content: 'search', node: {} },
       {
         content: '`find`',
@@ -853,7 +837,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '12', node: {} },
+      { content: '11', node: {} },
       { content: 'search', node: {} },
       {
         content: '`filter`',
@@ -876,7 +860,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '13', node: {} },
+      { content: '12', node: {} },
       { content: 'search', node: {} },
       {
         content: '`findIndex`',
@@ -898,7 +882,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '14', node: {} },
+      { content: '13', node: {} },
       { content: 'iterate', node: {} },
       {
         content: '`forEach`',
@@ -917,7 +901,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '15', node: {} },
+      { content: '14', node: {} },
       { content: 'transform', node: {} },
       {
         content: '`map`',
@@ -940,7 +924,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '16', node: {} },
+      { content: '15', node: {} },
       { content: 'transform', node: {} },
       {
         content: '`sort`',
@@ -959,7 +943,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '17', node: {} },
+      { content: '16', node: {} },
       { content: 'transform', node: {} },
       {
         content: '`reverse`',
@@ -978,7 +962,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '18', node: {} },
+      { content: '17', node: {} },
       { content: 'transform', node: {} },
       {
         content: '`split`',
@@ -997,7 +981,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '19', node: {} },
+      { content: '18', node: {} },
       { content: 'transform', node: {} },
       {
         content: '`join`',
@@ -1016,7 +1000,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '20', node: {} },
+      { content: '19', node: {} },
       { content: 'transform', node: {} },
       {
         content: '`reduce`',
@@ -1039,7 +1023,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '21', node: {} },
+      { content: '20', node: {} },
       { content: 'check', node: {} },
       {
         content: '`Array.isArray`',
@@ -1058,7 +1042,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '22', node: {} },
+      { content: '21', node: {} },
       { content: 'check', node: {} },
       {
         content: '`some`',
@@ -1081,7 +1065,7 @@ let arrays = [
   },
   {
     cells: [
-      { content: '23', node: {} },
+      { content: '22', node: {} },
       { content: 'check', node: {} },
       {
         content: '`every`',
@@ -1101,21 +1085,5 @@ let arrays = [
     ],
     node: {},
     doc: '# every',
-  },
-  {
-    cells: [
-      { content: '', node: {} },
-      { content: '', node: {} },
-      { content: '', node: {} },
-      {
-        content: 'made by someone0815 [Github](https://github.com/someone0815)',
-        node: {},
-      },
-      { content: '', node: {} },
-      { content: '', node: {} },
-      { content: '', node: {} },
-      { content: '', node: {} },
-    ],
-    node: {},
   },
 ];
